@@ -1,22 +1,24 @@
 const express = require('express');
+const { animals } = require('./data/animals');
+
 const PORT = process.env.PORT || 3001;
 const app = express();
-const { animals } = require('./data/animals');
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
     let filteredResults = animalsArray;
-    if (typeof query.personalityTraits === 'string') {
-        personalityTraitsArray = [query.personalityTraits];
-      } else {
-        personalityTraitsArray = query.personalityTraits;
-      }
-
-      personalityTraitsArray.forEach(trait => {
-        filteredResults = filteredResults.filter(
+    if (query.personalityTraits) {
+        if (typeof query.personalityTraits === 'string') {
+          personalityTraitsArray = [query.personalityTraits];
+        } else {
+          personalityTraitsArray = query.personalityTraits;
+        }
+        personalityTraitsArray.forEach(trait => {
+          filteredResults = filteredResults.filter(
             animal => animal.personalityTraits.indexOf(trait) !== -1
-        );
-      });
+          );
+        });
+      }
       
     if (query.diet) {
         filteredResults = filteredResults.filter(animal => animal.diet === query.diet);
